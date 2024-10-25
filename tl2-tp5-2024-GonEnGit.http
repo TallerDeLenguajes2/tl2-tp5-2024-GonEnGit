@@ -1,0 +1,6 @@
+@tl2_tp5_2024_GonEnGit_HostAddress = http://localhost:5274
+
+GET {{tl2_tp5_2024_GonEnGit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
