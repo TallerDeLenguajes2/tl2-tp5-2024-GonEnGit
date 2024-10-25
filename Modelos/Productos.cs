@@ -1,7 +1,7 @@
 
-namespace EspacioEmpresa;
+namespace EspacioModelos;
 
-class Productos
+public class Productos
 {
     private int id;
     private string descripcion;
