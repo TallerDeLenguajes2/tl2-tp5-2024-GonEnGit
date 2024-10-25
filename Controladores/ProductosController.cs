@@ -11,8 +11,6 @@ namespace EspacioControllers;
 [Route("ProductosController")]
 public class ProductosController : ControllerBase
 {
-    public ProductosController() {}
-
     private ProductoRepository repoProducto = new ProductoRepository();
 
     [HttpPost]
@@ -21,5 +19,14 @@ public class ProductosController : ControllerBase
         repoProducto.CargarNuevoProducto(producto);
 
         return Ok("Producto cargado con exito.");
-    }   
+    }
+
+    [HttpGet]
+    public ActionResult ListarProductos()
+    {
+        List<Productos> productosAMostrar;
+        productosAMostrar = repoProducto.ListarProductos();
+
+        return Ok(productosAMostrar);
+    }
 }
