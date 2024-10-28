@@ -14,11 +14,19 @@ public class ProductosController : ControllerBase
     private ProductoRepository repoProducto = new ProductoRepository();
 
     [HttpPost]
-    public ActionResult CargarProducto([FromBody] Productos producto)
+    public ActionResult CargarProducto(Productos producto)
     {
         repoProducto.CargarNuevoProducto(producto);
 
         return Ok("Producto cargado con exito.");
+    }
+
+    [HttpPut]
+    public ActionResult ActualizarProducto(int id, string descripcion, double precio)
+    {
+        repoProducto.ActualizarProducto(id, descripcion, precio);
+
+        return Ok("Producto actualizado correctamente.");
     }
 
     [HttpGet]

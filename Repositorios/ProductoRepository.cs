@@ -9,12 +9,13 @@ public class ProductoRepository
 {
 // esta cadena de conexion es parte de la clase no de los metodos
     string cadenaDeConexion = "Data Source = db\\Tienda.db";
+
+// metodos, cada uno lleva su peticion pre armada
     public void CargarNuevoProducto(Productos producto)
     {
     // no te comas las @, estan para mapear los atributos mas abajo
-        string peticion = @"INSERT INTO Productos(Descripcion,Precio) VALUES (@Descripcion,@Precio)";
-        Productos nuevo = new Productos();
-        
+        string peticion = @"INSERT INTO Productos(Descripcion, Precio) VALUES (@Descripcion, @Precio)";
+
     // a esot lo podes seguir como está en la teoria
         using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
@@ -24,6 +25,24 @@ public class ProductoRepository
         // para ligar el parametro del query con el valor que corresponda
             comando.Parameters.Add(new SqliteParameter("@Descripcion", producto.Descripcion));
             comando.Parameters.Add(new SqliteParameter("@Precio", producto.Precio));
+            comando.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
+
+    public void ActualizarProducto(int id, string descripcion, double precio)
+    {
+        string peticion = @"UPDATE productos SET Descripcion = @descripcion, Precio = @precio WHERE idProducto = @id";
+
+        using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
+        {
+            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            conexion.Open();
+
+            comando.Parameters.Add(new SqliteParameter("@descripcion", descripcion));
+            comando.Parameters.Add(new SqliteParameter("@precio", precio));
+            comando.Parameters.Add(new SqliteParameter("@id", id));
+
             comando.ExecuteNonQuery();
             conexion.Close();
         }
