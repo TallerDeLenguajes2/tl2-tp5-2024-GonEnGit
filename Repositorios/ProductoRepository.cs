@@ -74,4 +74,26 @@ public class ProductoRepository
             return lista;
         }
     }
+
+    public List<int> ObtenerListaId()
+    {
+        List<int> listaId = new List<int>();
+        string peticion = @"SELECT idProducto FROM Productos";
+
+        using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
+        {
+            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            conexion.Open();
+
+            using (SqliteDataReader lector = comando.ExecuteReader())
+            {
+                while (lector.Read())
+                {
+                    listaId.Add(Convert.ToInt32(lector["idProducto"]));
+                }
+            }
+        }
+
+        return listaId;
+    }
 }

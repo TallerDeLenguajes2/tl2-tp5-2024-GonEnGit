@@ -24,16 +24,24 @@ public class ProductosController : ControllerBase
     [HttpPut]
     public ActionResult ActualizarProducto(int id, string descripcion, double precio)
     {
-        repoProducto.ActualizarProducto(id, descripcion, precio);
+        List<int> listaId = repoProducto.ObtenerListaId();
+        bool existe = listaId.Any(deLaLista => deLaLista == id); // .Any() busca si almenos 1 coincide, todos los idProducto son unicos
 
-        return Ok("Producto actualizado correctamente.");
+        if (existe)
+        {
+            repoProducto.ActualizarProducto(id, descripcion, precio);
+            return Ok("Producto actualizado correctamente.");
+        }
+        else
+        {
+            return NotFound("Este id no le corresponde a ningun producto.");
+        }
     }
 
     [HttpGet]
     public ActionResult ListarProductos()
     {
-        List<Productos> productosAMostrar;
-        productosAMostrar = repoProducto.ListarProductos();
+        List<Productos> productosAMostrar = repoProducto.ListarProductos();
 
         return Ok(productosAMostrar);
     }
