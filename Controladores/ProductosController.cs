@@ -13,7 +13,7 @@ public class ProductosController : ControllerBase
 {
     private ProductoRepository repoProducto = new ProductoRepository();
 
-    [HttpPost]
+    [HttpPost("/api/Producto")]
     public ActionResult CargarProducto(Productos producto)
     {
         repoProducto.CargarNuevoProducto(producto);
@@ -21,10 +21,10 @@ public class ProductosController : ControllerBase
         return Ok("Producto cargado con exito.");
     }
 
-    [HttpPut]
+    [HttpPut("/api/Producto/{id}")]
     public ActionResult ActualizarProducto(int id, string descripcion, double precio)
     {
-        List<int> listaId = repoProducto.ObtenerListaId();
+        List<int> listaId = repoProducto.ObtenerListaId("idProducto", "Productos");
         bool existe = listaId.Any(deLaLista => deLaLista == id); // .Any() busca si almenos 1 coincide, todos los idProducto son unicos
 
         if (existe)
@@ -38,7 +38,7 @@ public class ProductosController : ControllerBase
         }
     }
 
-    [HttpGet]
+    [HttpGet("/api/Producto")]
     public ActionResult ListarProductos()
     {
         List<Productos> productosAMostrar = repoProducto.ListarProductos();

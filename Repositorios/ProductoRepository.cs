@@ -10,16 +10,16 @@ public class ProductoRepository
 // esta cadena de conexion es parte de la clase no de los metodos
     string cadenaDeConexion = "Data Source = db\\Tienda.db";
 
-// metodos, cada uno lleva su peticion pre armada
+// metodos, cada uno lleva su consulta pre armada
     public void CargarNuevoProducto(Productos producto)
     {
     // no te comas las @, estan para mapear los atributos mas abajo
-        string peticion = @"INSERT INTO Productos(Descripcion, Precio) VALUES (@Descripcion, @Precio)";
+        string consulta = @"INSERT INTO Productos(Descripcion, Precio) VALUES (@Descripcion, @Precio)";
 
-    // a esot lo podes seguir como está en la teoria
+    // a esto lo podes seguir como está en la teoria
         using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
-            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
             conexion.Open();
         // esto mencionaron en la teoria, 'Parameters' lo usas
         // para ligar el parametro del query con el valor que corresponda
@@ -32,11 +32,11 @@ public class ProductoRepository
 
     public void ActualizarProducto(int id, string descripcion, double precio)
     {
-        string peticion = @"UPDATE productos SET Descripcion = @descripcion, Precio = @precio WHERE idProducto = @id";
+        string consulta = @"UPDATE productos SET Descripcion = @descripcion, Precio = @precio WHERE idProducto = @id";
 
         using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
-            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
             conexion.Open();
 
             comando.Parameters.Add(new SqliteParameter("@descripcion", descripcion));
@@ -51,11 +51,11 @@ public class ProductoRepository
     public List<Productos> ListarProductos()
     {
         List<Productos> lista = new List<Productos>();
-        string peticion = @"SELECT * FROM Productos";
+        string consulta = @"SELECT * FROM Productos";
 
         using(SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
-            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
             conexion.Open();
             using(SqliteDataReader lector = comando.ExecuteReader())
             {
@@ -75,14 +75,17 @@ public class ProductoRepository
         }
     }
 
-    public List<int> ObtenerListaId()
+    public List<int> ObtenerListaId(string campo, string tabla)
     {
         List<int> listaId = new List<int>();
-        string peticion = @"SELECT idProducto FROM Productos";
+
+    // parece que no se puede usar parameter con nombre de tablas, pregunta si está bien esto
+    // así la funcion podrias usarse siempre que haga falta sin importar la tabla
+        string consulta = $"SELECT {campo} FROM {tabla}";
 
         using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
-            SqliteCommand comando = new SqliteCommand(peticion, conexion);
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
             conexion.Open();
 
             using (SqliteDataReader lector = comando.ExecuteReader())
@@ -92,6 +95,8 @@ public class ProductoRepository
                     listaId.Add(Convert.ToInt32(lector["idProducto"]));
                 }
             }
+
+            conexion.Close();
         }
 
         return listaId;
