@@ -70,4 +70,23 @@ public class PresupuestoRepository
             return lista;
         }
     }
+
+// puede haber mas de un detalle con el mismo n° de presupuesto... esto debe estar mal
+    public void ActualizarDetalle(int idPresupuesto, int idProducto, int cantidad)
+    {
+        string consulta = "UPDATE PresupuestoDetalle SET idProducto = @idProducto, Cantidad = @cantidad WHERE idPresupuesto = @idPresupuesto";
+
+        using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
+        {
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
+            conexion.Open();
+
+            comando.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
+            comando.Parameters.Add(new SqliteParameter("@cantidad", cantidad));
+            comando.Parameters.Add(new SqliteParameter("@idPresupuesto", idPresupuesto));
+
+            comando.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
 }

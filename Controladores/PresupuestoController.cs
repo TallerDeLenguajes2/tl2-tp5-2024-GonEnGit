@@ -36,5 +36,11 @@ public class PresupuestoController : ControllerBase
         return Ok(presupuestos);
     }
 
-    //[HttpPut("/api/Presupuesto/{id}")]
+    [HttpPut("/api/Presupuesto/{idPresupuesto}")]
+    public ActionResult ActualizarDetalle(PresupuestoDetalle detalle)
+    {
+        repoPresupuestos.ActualizarDetalle(detalle.IdPresupuesto, detalle.IdProducto, detalle.Cantidad);
+
+        return Ok("Detalle actualizado.");
+    }
 }
