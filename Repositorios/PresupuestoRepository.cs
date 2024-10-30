@@ -26,17 +26,18 @@ public class PresupuestoRepository
         }
     }
 
-    public void AgregarDetalle(PresupuestoDetalle detalle)
+    public void AgregarDetalle(int idPresupuesto, int idProducto, int cantidad)
     {
-        string consulta = @"INSERT INTO PresupuestosDetalle(idProducto, cantidad) VALUES (@id, @cant)";
+        string consulta = @"INSERT INTO PresupuestosDetalle(idPresupuesto, idProducto, cantidad) VALUES (@idPres, @idProd, @cant)";
 
         using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
         {
             SqliteCommand comando = new SqliteCommand(consulta, conexion);
             conexion.Open();
 
-            comando.Parameters.Add(new SqliteParameter("@id", detalle.IdProducto));
-            comando.Parameters.Add(new SqliteParameter("@cant", detalle.Cantidad));
+            comando.Parameters.Add(new SqliteParameter("@idPres", idPresupuesto));
+            comando.Parameters.Add(new SqliteParameter("@idProd", idProducto));
+            comando.Parameters.Add(new SqliteParameter("@cant", cantidad));
 
             comando.ExecuteNonQuery();
             conexion.Close();

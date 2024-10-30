@@ -19,12 +19,13 @@ public class PresupuestoController : ControllerBase
         return Ok("Presupuesto creado exitosamente.");
     }
 
+// tendrias que consultar si esto está bien
     [HttpPost("/api/Presupuesto/{id}/PresupuestoDetalle")]
     public ActionResult AgregarDetalle(PresupuestoDetalle detalle)
     {
-        repoPresupuestos.AgregarDetalle(detalle);
+        repoPresupuestos.AgregarDetalle(detalle.IdPresupuesto, detalle.IdProducto, detalle.Cantidad);
 
-        return Ok("Presupuesto agregado correctamente.");
+        return Ok("Detalle agregado correctamente.");
     }
 
     [HttpGet("/api/Presupuesto")]
