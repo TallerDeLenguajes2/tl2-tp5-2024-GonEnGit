@@ -25,4 +25,48 @@ public class PresupuestoRepository
             conexion.Close();
         }
     }
+
+    public void AgregarDetalle(PresupuestoDetalle detalle)
+    {
+        string consulta = @"INSERT INTO PresupuestosDetalle(idProducto, cantidad) VALUES (@id, @cant)";
+
+        using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
+        {
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
+            conexion.Open();
+
+            comando.Parameters.Add(new SqliteParameter("@id", detalle.IdProducto));
+            comando.Parameters.Add(new SqliteParameter("@cant", detalle.Cantidad));
+
+            comando.ExecuteNonQuery();
+            conexion.Close();
+        }
+    }
+
+    public List<Presupuesto> ConsultarPresupuestos()
+    {
+        List<Presupuesto> lista = new List<Presupuesto>();
+        string consulta = "SELECT * FROM Presupuestos";
+
+        using (SqliteConnection conexion = new SqliteConnection(cadenaDeConexion))
+        {
+            SqliteCommand comando = new SqliteCommand(consulta, conexion);
+            conexion.Open();
+
+            using (SqliteDataReader lector = comando.ExecuteReader())
+            {
+                while (lector.Read())
+                {
+                    Presupuesto presupuestoLeido = new Presupuesto();
+                    presupuestoLeido.IdPresupuesto = Convert.ToInt32(lector["idPresupuesto"]);
+                    presupuestoLeido.NombreDestinatario = lector["NombreDestinatario"].ToString();
+                    presupuestoLeido.FechaCreacion = lector["FechaCreacion"].ToString();
+                    lista.Add(presupuestoLeido);
+                }
+            }
+            conexion.Close();
+
+            return lista;
+        }
+    }
 }

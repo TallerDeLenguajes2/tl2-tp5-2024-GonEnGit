@@ -18,4 +18,22 @@ public class PresupuestoController : ControllerBase
 
         return Ok("Presupuesto creado exitosamente.");
     }
+
+    [HttpPost("/api/Presupuesto/{id}/PresupuestoDetalle")]
+    public ActionResult AgregarDetalle(PresupuestoDetalle detalle)
+    {
+        repoPresupuestos.AgregarDetalle(detalle);
+
+        return Ok("Presupuesto agregado correctamente.");
+    }
+
+    [HttpGet("/api/Presupuesto")]
+    public ActionResult ConsultarPresupuestos()
+    {
+        List<Presupuesto> presupuestos = repoPresupuestos.ConsultarPresupuestos();
+
+        return Ok(presupuestos);
+    }
+
+    //[HttpPut("/api/Presupuesto/{id}")]
 }
